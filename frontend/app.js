@@ -598,26 +598,31 @@ function copyToClipboard(text, btnElement = null, successMsg = "Copied!") {
   }
 }
 
-function openMailComposer(subject, body, provider = "gmail", feedbackEl = null) {
+function openMailComposer(subject, body, provider = "gmail", feedbackEl = null, toEmail = "") {
   copyToClipboard(body);
+  const targetEmail = (toEmail || "").trim();
   if (feedbackEl) {
-    feedbackEl.innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Notice copied to clipboard!</span> Opening ${provider === "gmail" ? "Gmail" : provider === "outlook" ? "Outlook Web" : "default mail app"}...`;
+    feedbackEl.innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Notice copied to clipboard!</span> Opening ${provider === "gmail" ? "Gmail" : provider === "outlook" ? "Outlook Web" : "default mail app"}${targetEmail ? " (Recipient: " + esc(targetEmail) + ")" : ""}...`;
   }
 
+  const sTo = encodeURIComponent(targetEmail);
   const sSub = encodeURIComponent(subject || "Formal Dispute Notice");
   // Keep body snippet safe from URL length restrictions (~1500 chars)
   const safeSnippet = body.length > 1500
-    ? body.slice(0, 1500) + "\n\n[Full legal text copied to clipboard. Press Paste (Cmd+V / Ctrl+V) here for complete notice]"
+    ? body.slice(0, 1500) + "\n\n[Full legal notice copied to clipboard. Press Paste (Cmd+V / Ctrl+V) here for full text]"
     : body;
   const sBody = encodeURIComponent(safeSnippet);
 
   if (provider === "gmail") {
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
+    const toParam = sTo ? `&to=${sTo}` : "";
+    window.open(`https://mail.google.com/mail/?view=cm&fs=1${toParam}&su=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
   } else if (provider === "outlook") {
-    window.open(`https://outlook.live.com/mail/0/deeplink/compose?subject=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
+    const toParam = sTo ? `to=${sTo}&` : "";
+    window.open(`https://outlook.live.com/mail/0/deeplink/compose?${toParam}subject=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
   } else {
     // Default system mailto client
-    const mailtoUri = `mailto:?subject=${sSub}&body=${sBody}`;
+    const toStr = targetEmail ? `${targetEmail}?` : "?";
+    const mailtoUri = `mailto:${toStr}subject=${sSub}&body=${sBody}`;
     const link = document.createElement("a");
     link.href = mailtoUri;
     document.body.appendChild(link);
@@ -626,6 +631,33 @@ function openMailComposer(subject, body, provider = "gmail", feedbackEl = null) 
       if (document.body.contains(link)) document.body.removeChild(link);
     }, 300);
   }
+}
+
+function downloadEmlFile(subject, body, toEmail = "", fromEmail = "consumer@example.com") {
+  const safeTo = toEmail || "grievance-officer@oppositeparty.com";
+  const dateStr = new Date().toUTCString();
+  const emlContent = 
+`From: ${fromEmail}
+To: ${safeTo}
+Date: ${dateStr}
+Subject: ${subject}
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+
+${body}
+`;
+
+  const blob = new Blob([emlContent], { type: "message/rfc822" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `Legal_Notice_${Date.now()}.eml`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 500);
 }
 
 function openExternalPortal(url) {
@@ -1073,6 +1105,10 @@ function setupComplaintWizard() {
 
         const result = await api(`/api/cases/${current}/automated-complaint`, { body: payload });
 
+        const userEmail = $("cq_email").value.trim();
+        const oppositeEntity = result.entity || "Merchant / Service Provider";
+        const merchantEmail = "grievance-officer@" + oppositeEntity.toLowerCase().replace(/[^a-z0-9]/g, "") + ".com";
+
         $("modalCard").innerHTML = `
           <h3>Dispute Package Compiled</h3>
           <p class="modal-caption">Formal legal demand & National Consumer Helpline filing docket ready for dispatch.</p>
@@ -1080,15 +1116,22 @@ function setupComplaintWizard() {
           <div style="margin-bottom:16px;">
             <div class="statutory-badge">Notice 1: Formal Merchant Legal Demand</div>
             <textarea style="width:100%;min-height:160px;font-family:var(--font-mono);font-size:11.5px;background:var(--bg-subtle);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:10px;margin-top:6px;" id="dispNotice">${esc(result.legal_notice)}</textarea>
-            <div id="noticeFeedback" style="font-size:12px;margin:4px 0;min-height:18px;"></div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;">
-              <button class="btn btn-secondary btn-sm" id="btnCopyNotice">Copy Legal Notice</button>
-              <button class="btn btn-primary btn-sm" id="btnNoticeGmail">
+            <div id="noticeFeedback" style="font-size:12.5px;margin:6px 0;min-height:18px;"></div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
+              <button class="btn btn-primary btn-sm" id="btnEmailMyself">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <span>Email Notice to My Inbox (${esc(userEmail)})</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btnDownloadEml">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download Email (.eml)</span>
+              </button>
+              <button class="btn btn-secondary btn-sm" id="btnNoticeGmail">
                 <span>Open in Gmail</span>
               </button>
+              <button class="btn btn-secondary btn-sm" id="btnCopyNotice">Copy Legal Notice</button>
               <button class="btn btn-secondary btn-sm" id="btnNoticeMailto">
-                <span>Default Mail App</span>
+                <span>Mail App</span>
               </button>
               <button class="btn btn-secondary btn-sm" id="btnNoticeOutlook">
                 <span>Outlook Web</span>
@@ -1106,7 +1149,7 @@ function setupComplaintWizard() {
               <div><strong>Relief Claimed:</strong> ${esc(result.nch_docket.relief_claimed)}</div>
               <div style="margin-top:4px;"><strong>Chronology & Facts:</strong> ${esc(result.nch_docket.grievance_summary)}</div>
             </div>
-            <div id="nchFeedback" style="font-size:12px;margin:4px 0;min-height:18px;"></div>
+            <div id="nchFeedback" style="font-size:12.5px;margin:6px 0;min-height:18px;"></div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
               <button class="btn btn-secondary btn-sm" id="btnCopyNch">Copy NCH Docket</button>
               <button class="btn btn-primary btn-sm" id="btnOpenNch">
@@ -1127,17 +1170,24 @@ function setupComplaintWizard() {
           </div>
         `;
 
+        $("btnEmailMyself").onclick = () => {
+          openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"), userEmail);
+        };
+        $("btnDownloadEml").onclick = () => {
+          downloadEmlFile(result.subject, $("dispNotice").value, merchantEmail, userEmail);
+          if ($("noticeFeedback")) $("noticeFeedback").innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Email (.eml) downloaded!</span> Double-click it in your Downloads folder to open in Apple Mail or Outlook.`;
+        };
         $("btnCopyNotice").onclick = () => {
           copyToClipboard($("dispNotice").value, $("btnCopyNotice"), "Notice Copied!");
         };
         $("btnNoticeGmail").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"));
+          openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"), merchantEmail);
         };
         $("btnNoticeMailto").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "default", $("noticeFeedback"));
+          openMailComposer(result.subject, $("dispNotice").value, "default", $("noticeFeedback"), merchantEmail);
         };
         $("btnNoticeOutlook").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "outlook", $("noticeFeedback"));
+          openMailComposer(result.subject, $("dispNotice").value, "outlook", $("noticeFeedback"), merchantEmail);
         };
 
         $("btnCopyNch").onclick = () => {

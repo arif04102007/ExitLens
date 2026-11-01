@@ -7,21 +7,21 @@
   --bg-app: #f9fafb;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
-  --bg-subtle: #f3f4f6;
-  --bg-muted: #e5e7eb;
+  --bg-subtle: #f0fdf4;
+  --bg-muted: #dcfce7;
 
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
+  --text-primary: #047857;
+  --text-secondary: #065f46;
+  --text-tertiary: #059669;
   --text-inverse: #ffffff;
 
-  --border-subtle: #e5e7eb;
-  --border-default: #d1d5db;
-  --border-focus: #111827;
+  --border-subtle: #d1fae5;
+  --border-default: #a7f3d0;
+  --border-focus: #10b981;
 
-  --brand-primary: #0f172a;
-  --brand-accent: #2563eb;
-  --brand-accent-subtle: #eff6ff;
+  --brand-primary: #059669;
+  --brand-accent: #10b981;
+  --brand-accent-subtle: #ecfdf5;
 
   --status-verified: #059669;
   --status-verified-bg: #ecfdf5;
@@ -35,9 +35,9 @@
   --status-danger-bg: #fef2f2;
   --status-danger-border: #fecaca;
 
-  --quote-surface: #fffbeb;
-  --quote-bar: #f59e0b;
-  --quote-text: #78350f;
+  --quote-surface: #f0fdf4;
+  --quote-bar: #10b981;
+  --quote-text: #065f46;
 
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -60,24 +60,24 @@
 /* DARK MODE OVERRIDES */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg-app: #090d16;
-    --bg-surface: #0f1623;
-    --bg-surface-elevated: #162032;
-    --bg-subtle: #192438;
-    --bg-muted: #24324c;
+    --bg-app: #080e14;
+    --bg-surface: #0c1520;
+    --bg-surface-elevated: #111e2e;
+    --bg-subtle: #142436;
+    --bg-muted: #1c324b;
 
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-tertiary: #64748b;
-    --text-inverse: #0f172a;
+    --text-primary: #10b981;
+    --text-secondary: #34d399;
+    --text-tertiary: #6ee7b7;
+    --text-inverse: #022c22;
 
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-default: rgba(255, 255, 255, 0.15);
-    --border-focus: #38bdf8;
+    --border-subtle: rgba(16, 185, 129, 0.15);
+    --border-default: rgba(16, 185, 129, 0.28);
+    --border-focus: #34d399;
 
-    --brand-primary: #38bdf8;
-    --brand-accent: #38bdf8;
-    --brand-accent-subtle: rgba(56, 189, 248, 0.1);
+    --brand-primary: #10b981;
+    --brand-accent: #34d399;
+    --brand-accent-subtle: rgba(16, 185, 129, 0.15);
 
     --status-verified: #34d399;
     --status-verified-bg: rgba(6, 78, 59, 0.35);
@@ -91,9 +91,9 @@
     --status-danger-bg: rgba(127, 29, 29, 0.35);
     --status-danger-border: #991b1b;
 
-    --quote-surface: rgba(120, 53, 15, 0.2);
-    --quote-bar: #fbbf24;
-    --quote-text: #fef3c7;
+    --quote-surface: rgba(6, 78, 59, 0.25);
+    --quote-bar: #10b981;
+    --quote-text: #a7f3d0;
 
     --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
     --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
@@ -102,24 +102,24 @@
 }
 
 :root[data-theme="dark"] {
-  --bg-app: #090d16;
-  --bg-surface: #0f1623;
-  --bg-surface-elevated: #162032;
-  --bg-subtle: #192438;
-  --bg-muted: #24324c;
+  --bg-app: #080e14;
+  --bg-surface: #0c1520;
+  --bg-surface-elevated: #111e2e;
+  --bg-subtle: #142436;
+  --bg-muted: #1c324b;
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --text-inverse: #0f172a;
+  --text-primary: #10b981;
+  --text-secondary: #34d399;
+  --text-tertiary: #6ee7b7;
+  --text-inverse: #022c22;
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-default: rgba(255, 255, 255, 0.15);
-  --border-focus: #38bdf8;
+  --border-subtle: rgba(16, 185, 129, 0.15);
+  --border-default: rgba(16, 185, 129, 0.28);
+  --border-focus: #34d399;
 
-  --brand-primary: #38bdf8;
-  --brand-accent: #38bdf8;
-  --brand-accent-subtle: rgba(56, 189, 248, 0.1);
+  --brand-primary: #10b981;
+  --brand-accent: #34d399;
+  --brand-accent-subtle: rgba(16, 185, 129, 0.15);
 
   --status-verified: #34d399;
   --status-verified-bg: rgba(6, 78, 59, 0.35);
@@ -133,9 +133,9 @@
   --status-danger-bg: rgba(127, 29, 29, 0.35);
   --status-danger-border: #991b1b;
 
-  --quote-surface: rgba(120, 53, 15, 0.2);
-  --quote-bar: #fbbf24;
-  --quote-text: #fef3c7;
+  --quote-surface: rgba(6, 78, 59, 0.25);
+  --quote-bar: #10b981;
+  --quote-text: #a7f3d0;
 
   --shadow-subtle: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
   --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
@@ -146,18 +146,18 @@
   --bg-app: #f9fafb;
   --bg-surface: #ffffff;
   --bg-surface-elevated: #ffffff;
-  --bg-subtle: #f3f4f6;
-  --bg-muted: #e5e7eb;
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
+  --bg-subtle: #f0fdf4;
+  --bg-muted: #dcfce7;
+  --text-primary: #047857;
+  --text-secondary: #065f46;
+  --text-tertiary: #059669;
   --text-inverse: #ffffff;
-  --border-subtle: #e5e7eb;
-  --border-default: #d1d5db;
-  --border-focus: #111827;
-  --brand-primary: #0f172a;
-  --brand-accent: #2563eb;
-  --brand-accent-subtle: #eff6ff;
+  --border-subtle: #d1fae5;
+  --border-default: #a7f3d0;
+  --border-focus: #10b981;
+  --brand-primary: #059669;
+  --brand-accent: #10b981;
+  --brand-accent-subtle: #ecfdf5;
   --status-verified: #059669;
   --status-verified-bg: #ecfdf5;
   --status-verified-border: #a7f3d0;
