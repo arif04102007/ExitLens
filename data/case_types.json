@@ -1,0 +1,162 @@
+{
+  "defective_product": {
+    "label": "Defective Product",
+    "icon": "🔧",
+    "keywords": "defective|broken|stopped working|not working|faulty|damaged|dead|cracked|malfunction|doesn't turn on|won't charge",
+    "parties": ["seller", "manufacturer"],
+    "policy_topics": {"seller": "return, replacement and refund policy", "manufacturer": "warranty policy and how to make a warranty claim"},
+    "search_queries": {"seller": ["{name} return policy", "{name} returns and refunds help"], "manufacturer": ["{name} warranty policy India", "{name} warranty claim support"]}
+  },
+  "subscription_cancel": {
+    "label": "Subscription Cancellation",
+    "icon": "🔄",
+    "keywords": "cancel|subscription|membership|unsubscribe|auto-?renew|premium plan|recurring charge",
+    "parties": ["service"],
+    "policy_topics": {"service": "cancellation, billing and refund policy"},
+    "search_queries": {"service": ["{name} cancel subscription refund policy", "{name} cancel membership help"]}
+  },
+  "delayed_delivery": {
+    "label": "Delayed Delivery",
+    "icon": "📦",
+    "keywords": "delay|not delivered|never arrived|didn't arrive|late delivery|not received|still waiting|shipping delay",
+    "parties": ["seller"],
+    "policy_topics": {"seller": "delivery, cancellation, return and refund policy"},
+    "search_queries": {"seller": ["{name} delivery policy", "{name} late delivery refund help"]}
+  },
+  "food_delivery_issue": {
+    "label": "Food Delivery Issue",
+    "icon": "🍕",
+    "keywords": "wrong food|wrong order|missing item|cold food|stale|spoiled|food poisoning|insect|hair in food|spilled|late food|veg.{0,10}non.?veg|non.?veg.{0,10}veg|swiggy|zomato|zepto|blinkit|food delivery",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "cancellation, refund and food safety policy"},
+    "search_queries": {"platform": ["{name} refund policy food order", "{name} cancellation refund help"]}
+  },
+  "flight_issue": {
+    "label": "Flight Issue",
+    "icon": "✈️",
+    "keywords": "flight cancel|flight delay|denied boarding|baggage lost|baggage damaged|airline refund|credit shell|boarding pass|missed flight|overbooking",
+    "parties": ["airline", "ota"],
+    "policy_topics": {"airline": "conditions of carriage, cancellation and refund policy", "ota": "booking cancellation and refund policy"},
+    "search_queries": {"airline": ["{name} refund policy cancelled flight", "{name} conditions of carriage passenger rights"], "ota": ["{name} flight cancellation refund policy", "{name} booking help refund"]}
+  },
+  "train_issue": {
+    "label": "Train / IRCTC Issue",
+    "icon": "🚂",
+    "keywords": "train cancel|train delay|irctc|tdr|rac|waitlist|ac not working|coach|berth|tatkal refund|railway",
+    "parties": ["railway"],
+    "policy_topics": {"railway": "TDR filing, cancellation and refund rules"},
+    "search_queries": {"railway": ["{name} cancellation refund rules", "{name} TDR refund policy"]}
+  },
+  "ride_hailing_issue": {
+    "label": "Cab / Ride Issue",
+    "icon": "🚗",
+    "keywords": "uber|ola|rapido|cab cancel|driver cancel|extra cash|surge|overcharge|wrong route|safety|sos|driver rude|ac refused",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "rider terms, cancellation, fare and safety policy"},
+    "search_queries": {"platform": ["{name} rider cancellation refund policy", "{name} fare dispute help"]}
+  },
+  "wrong_item_delivered": {
+    "label": "Wrong Item Delivered",
+    "icon": "❌",
+    "keywords": "wrong item|wrong size|wrong color|wrong product|different item|not what I ordered|incorrect item|wrong variant|empty box",
+    "parties": ["seller"],
+    "policy_topics": {"seller": "return, replacement and refund policy for incorrect items"},
+    "search_queries": {"seller": ["{name} wrong item return policy", "{name} replacement refund help"]}
+  },
+  "payment_dispute": {
+    "label": "Payment / UPI Issue",
+    "icon": "💳",
+    "keywords": "upi failed|payment stuck|money debited|not credited|unauthorized|fraud|wallet frozen|double charged|refund not received|transaction failed|otp|phishing",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "dispute redressal, failed transaction and fraud liability policy"},
+    "search_queries": {"platform": ["{name} dispute redressal policy", "{name} failed transaction refund help"]}
+  },
+  "ticket_booking_issue": {
+    "label": "Ticket / Event Issue",
+    "icon": "🎬",
+    "keywords": "event cancel|show cancel|ticket refund|bookmyshow|convenience fee|booking fee|concert cancel|movie cancel|no refund",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "ticket cancellation, refund and exchange policy"},
+    "search_queries": {"platform": ["{name} ticket refund cancellation policy", "{name} event cancellation refund help"]}
+  },
+  "telecom_issue": {
+    "label": "Telecom / Broadband Issue",
+    "icon": "📱",
+    "keywords": "network|no signal|broadband down|internet not working|data speed|vas charge|caller tune|porting|mnp|recharge failed|sim block|bill dispute|spam call|dnd",
+    "parties": ["telco"],
+    "policy_topics": {"telco": "citizen charter, grievance redressal and quality of service policy"},
+    "search_queries": {"telco": ["{name} customer grievance redressal policy", "{name} citizen charter complaints"]}
+  },
+  "insurance_claim": {
+    "label": "Insurance Claim Issue",
+    "icon": "🛡️",
+    "keywords": "claim rejected|cashless denied|insurance refund|premium dispute|mis-selling|policy cancelled|health insurance|motor insurance|claim repudiated|tpa",
+    "parties": ["insurer"],
+    "policy_topics": {"insurer": "claim settlement, grievance redressal and policyholder rights"},
+    "search_queries": {"insurer": ["{name} claim settlement grievance policy", "{name} policyholder rights help"]}
+  },
+  "banking_dispute": {
+    "label": "Banking Dispute",
+    "icon": "🏦",
+    "keywords": "cibil|credit score|recovery agent|harassment|loan|emi|atm failed|minimum balance|hidden charge|debit card|credit card charge|account frozen",
+    "parties": ["bank"],
+    "policy_topics": {"bank": "schedule of charges, fair practices code and grievance redressal"},
+    "search_queries": {"bank": ["{name} customer grievance redressal policy", "{name} schedule of charges complaints"]}
+  },
+  "edtech_refund": {
+    "label": "EdTech / Coaching Refund",
+    "icon": "📚",
+    "keywords": "course refund|byju|unacademy|upgrad|coaching refund|placement guarantee|loan trap|emi education|no refund policy|drop out",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "enrolment cancellation, refund and financing terms"},
+    "search_queries": {"platform": ["{name} refund cancellation policy", "{name} course refund terms help"]}
+  },
+  "hotel_booking_issue": {
+    "label": "Hotel Booking Issue",
+    "icon": "🏨",
+    "keywords": "hotel denied|check-in refused|room not clean|oyo|hotel refund|booking cancel|service charge|resort fee|room different|no hot water|no ac",
+    "parties": ["platform", "hotel"],
+    "policy_topics": {"platform": "booking cancellation, no-show and refund policy", "hotel": "check-in, cancellation and guest policy"},
+    "search_queries": {"platform": ["{name} hotel cancellation refund policy", "{name} booking help refund"], "hotel": ["{name} guest cancellation policy"]}
+  },
+  "health_pharma_issue": {
+    "label": "Health / Pharmacy Issue",
+    "icon": "🏥",
+    "keywords": "expired medicine|wrong medicine|wrong drug|pharmeasy|1mg|netmeds|teleconsult|doctor no show|wrong dosage|pharmacy",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "prescription drug dispensing, return and refund policy"},
+    "search_queries": {"platform": ["{name} medicine return refund policy", "{name} customer support help"]}
+  },
+  "grocery_delivery_issue": {
+    "label": "Grocery Delivery Issue",
+    "icon": "🥦",
+    "keywords": "rotten|expired|near expiry|missing item grocery|grocery refund|vegetables bad|fruits rotten|bigbasket|zepto grocery|blinkit grocery|instamart",
+    "parties": ["platform"],
+    "policy_topics": {"platform": "refund and cancellation policy for perishable goods"},
+    "search_queries": {"platform": ["{name} refund policy perishable goods", "{name} grocery delivery complaints help"]}
+  },
+  "furniture_delivery_issue": {
+    "label": "Furniture Delivery Issue",
+    "icon": "🪑",
+    "keywords": "furniture damaged|assembly|sofa|wardrobe|mattress|table broken|delivery delay furniture|pepperfry|urban ladder|ikea|wakefit",
+    "parties": ["seller"],
+    "policy_topics": {"seller": "shipping, delivery, installation, damage and warranty policy"},
+    "search_queries": {"seller": ["{name} delivery damage return policy", "{name} warranty claim furniture help"]}
+  },
+  "counterfeit_product": {
+    "label": "Counterfeit / Fake Product",
+    "icon": "⚠️",
+    "keywords": "fake|counterfeit|knockoff|duplicate|not original|not genuine|copy|first copy|replica|unauthorized",
+    "parties": ["seller"],
+    "policy_topics": {"seller": "authenticity guarantee, return and refund policy"},
+    "search_queries": {"seller": ["{name} authenticity guarantee return policy", "{name} fake product complaint help"]}
+  },
+  "seller_cancelled_order": {
+    "label": "Seller Cancelled My Order",
+    "icon": "🚫",
+    "keywords": "seller cancelled|order cancelled by|price error|out of stock cancel|refund pending cancel|cancelled without",
+    "parties": ["seller"],
+    "policy_topics": {"seller": "cancellation, refund timelines and compensation policy"},
+    "search_queries": {"seller": ["{name} order cancellation refund policy", "{name} seller cancellation compensation help"]}
+  }
+}

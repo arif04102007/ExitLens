@@ -1,0 +1,6 @@
+starlette>=0.37
+uvicorn>=0.30
+sse-starlette>=2.0
+requests>=2.31
+python-dotenv>=1.0
+pytest>=8.0

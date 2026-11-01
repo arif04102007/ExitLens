@@ -1,0 +1,149 @@
+{
+  "India": {
+    "general": {
+      "authority": "National Consumer Helpline & Consumer Commission",
+      "phone": "1915",
+      "url": "https://consumerhelpline.gov.in",
+      "portal": "https://e-jagriti.gov.in",
+      "whatsapp": "8800001915",
+      "text": "Contact the National Consumer Helpline (toll-free 1915, WhatsApp 8800001915) or file online via e-Jagriti (e-jagriti.gov.in). Free for claims up to \u20b95 Lakhs."
+    },
+    "regulators": {
+      "flight_issue": {
+        "name": "DGCA via AirSewa",
+        "url": "https://airsewa.gov.in",
+        "phone": "1800-11-4477",
+        "text": "File a complaint on AirSewa (airsewa.gov.in) or call 1800-11-4477. Under DGCA rules, airlines must pay \u20b95,000-\u20b920,000 compensation for cancellations and denied boarding."
+      },
+      "telecom_issue": {
+        "name": "TRAI Appellate Authority",
+        "phone": "1909",
+        "text": "Register DND complaints via SMS to 1909 or TRAI DND app. Escalate to the telco's Appellate Authority if unresolved within 30 days."
+      },
+      "payment_dispute": {
+        "name": "RBI Integrated Ombudsman",
+        "url": "https://cms.rbi.org.in",
+        "phone": "14448",
+        "text": "File at cms.rbi.org.in or call 14448. RBI Ombudsman can award up to \u20b920 Lakh compensation. UPI reversals must happen within T+1 day (\u20b9100/day penalty for delay)."
+      },
+      "banking_dispute": {
+        "name": "RBI Integrated Ombudsman",
+        "url": "https://cms.rbi.org.in",
+        "phone": "14448",
+        "text": "File at cms.rbi.org.in or call 14448. Under RBI rules, recovery agents cannot call before 8 AM or after 7 PM. Failed ATM transactions must be reversed within T+5 days."
+      },
+      "insurance_claim": {
+        "name": "IRDAI via Bima Bharosa",
+        "url": "https://bimabharosa.irdai.gov.in",
+        "text": "File at bimabharosa.irdai.gov.in. Insurance Ombudsman handles claims up to \u20b950 Lakh. Awards are binding on the insurer."
+      },
+      "food_delivery_issue": {
+        "name": "FSSAI Food Safety",
+        "url": "https://foodlicensing.fssai.gov.in",
+        "text": "Report food safety issues to FSSAI. Under FSSA 2006, both the restaurant and delivery platform are liable for unsafe food."
+      },
+      "ride_hailing_issue": {
+        "name": "State Transport Authority",
+        "text": "Under MoRTH guidelines, surge is capped at 1.5x base fare. Drivers cannot charge extra cash. File with your city's Regional Transport Office (RTO)."
+      },
+      "hotel_booking_issue": {
+        "name": "CCPA / Consumer Forum",
+        "text": "Under CCPA 2022 guidelines, hotel service charges are VOLUNTARY and cannot be forced. Denied check-in on a confirmed booking is actionable deficiency."
+      },
+      "edtech_refund": {
+        "name": "CCPA / Consumer Forum",
+        "text": "Under CCPA 2024 guidelines, coaching institutes cannot claim '100% selection' or 'guaranteed jobs'. 'No refund' policies have been declared void by the Supreme Court."
+      }
+    },
+    "legal_rights": {
+      "defective_product": [
+        {"law": "Consumer Protection Act 2019, Section 2(47)", "right": "Refusing refund for defective goods is an Unfair Trade Practice"},
+        {"law": "E-Commerce Rules 2020, Rule 5(3)", "right": "Sellers cannot refuse returns if goods are defective, deficient, or differ from description"},
+        {"law": "CPA 2019, Sections 82-87", "right": "Product manufacturer, service provider, and seller are all liable for harm from defective products"}
+      ],
+      "delayed_delivery": [
+        {"law": "E-Commerce Rules 2020, Rule 5(3)(e)", "right": "Platform cannot charge cancellation fees unless it pays equal compensation when it cancels"},
+        {"law": "CPA 2019, Section 2(11)", "right": "Late delivery beyond promised date is a deficiency of service"}
+      ],
+      "subscription_cancel": [
+        {"law": "CCPA Dark Patterns Guidelines 2023", "right": "Subscription Trap is illegal — cancellation must be as easy as subscribing"},
+        {"law": "CPA 2019, Section 2(47)", "right": "Non-refundable clauses when service is not rendered are an Unfair Trade Practice"}
+      ],
+      "food_delivery_issue": [
+        {"law": "FSSA 2006 & FSSAI Regulations", "right": "Both restaurant and aggregator are liable for unsafe food"},
+        {"law": "CPA 2019, Sections 84-86 (Product Liability)", "right": "Compensation for illness caused by unhygienic or contaminated food"},
+        {"law": "CCPA Dark Patterns 2023", "right": "Drip pricing (hidden platform/rain/handling fees) and basket sneaking (auto-adding tips) are illegal"}
+      ],
+      "flight_issue": [
+        {"law": "DGCA CAR Section 3, Series M, Part IV", "right": "Denied boarding: \u20b95,000-\u20b920,000 compensation. Flight cancelled <24h: alternate flight or refund + cash compensation"},
+        {"law": "DGCA CAR Section 3, Part II", "right": "100% refund of all taxes (UDF, PSF) on any cancelled ticket, even non-refundable"},
+        {"law": "Supreme Court (Pravasi Legal Cell v. UOI, 2020)", "right": "Airlines cannot force credit shells — must give direct refunds"}
+      ],
+      "ride_hailing_issue": [
+        {"law": "MoRTH Motor Vehicle Aggregator Guidelines 2020", "right": "Surge capped at 1.5x base fare. AC is mandatory without surcharge. Driver cancellation penalty: 10% (max \u20b9100)"},
+        {"law": "CCPA Notices 2022-2024", "right": "Forcing refund as wallet credits is anti-consumer"}
+      ],
+      "payment_dispute": [
+        {"law": "RBI TAT Circular (DPSS 2019)", "right": "UPI/IMPS reversal within T+1 day. \u20b9100/day penalty for delay, credited automatically"},
+        {"law": "RBI Zero Liability Policy 2017", "right": "Zero liability if fraud reported within 3 working days. Limited liability (\u20b95,000-\u20b925,000) if reported within 4-7 days"}
+      ],
+      "telecom_issue": [
+        {"law": "TRAI TCPR Regulations", "right": "Two-tier redressal: Customer Care → Appellate Authority (must decide within 30 days)"},
+        {"law": "TRAI TCCCPR 2018", "right": "Unauthorized VAS (Value Added Services) must be refunded within 24 hours"},
+        {"law": "MNP Regulations 2019", "right": "Porting must complete within 3-5 working days. Invalid rejection: \u20b910,000 penalty on telco"}
+      ],
+      "insurance_claim": [
+        {"law": "IRDAI Policyholders' Regulations 2024", "right": "30-day free-look period. Cashless authorization within 1 hour. Hospital discharge approval within 3 hours"},
+        {"law": "Insurance Act 1938, Section 45", "right": "Life insurance cannot be repudiated after 3 years from issuance"},
+        {"law": "Insurance Ombudsman Rules 2017/2023", "right": "Ombudsman handles claims up to \u20b950 Lakh. Award is binding on insurer"}
+      ],
+      "banking_dispute": [
+        {"law": "RBI Fair Practices Code", "right": "Recovery agents cannot call before 8 AM or after 7 PM, or contact unauthorized persons"},
+        {"law": "RBI Failed Transaction Circular", "right": "ATM failure reversal within T+5 days. \u20b9100/day penalty for delay"},
+        {"law": "RBI Integrated Ombudsman 2021", "right": "Can award up to \u20b920 Lakh for loss + \u20b91 Lakh for harassment"}
+      ],
+      "edtech_refund": [
+        {"law": "CCPA Coaching Guidelines 2024", "right": "Ban on claims like '100% selection' or 'guaranteed job'. Mandatory disclosure of course terms"},
+        {"law": "Supreme Court precedent", "right": "'Fee once paid not refunded' is NULL AND VOID. Institutes can only retain pro-rata fees for classes attended"},
+        {"law": "RBI Digital Lending Guidelines 2022", "right": "Mandatory cooling-off period (min 3 days) to exit education loan without penalty"}
+      ],
+      "hotel_booking_issue": [
+        {"law": "CCPA Service Charge Guidelines 2022", "right": "Service charge is VOLUNTARY. No hotel or restaurant can force it into the bill"},
+        {"law": "CPA 2019, Section 2(42)", "right": "Denied check-in on confirmed booking: compensation must cover alternative accommodation"},
+        {"law": "CCPA Dark Patterns 2023", "right": "Fake scarcity ('Only 1 room left!') and drip pricing (hidden resort fees) are illegal"}
+      ],
+      "wrong_item_delivered": [
+        {"law": "E-Commerce Rules 2020, Rule 4(4) & 5(3)", "right": "Cannot refuse returns if goods differ from description"},
+        {"law": "CPA 2019, Section 2(47)", "right": "Delivering wrong items is an Unfair Trade Practice"}
+      ],
+      "ticket_booking_issue": [
+        {"law": "CPA 2019, Section 2(47)", "right": "Non-refundable clauses when event is cancelled are an Unfair Trade Practice"},
+        {"law": "CCPA Dark Patterns 2023", "right": "Basket sneaking (auto-ticking donations) and false urgency (fake countdown timers) are illegal"}
+      ],
+      "grocery_delivery_issue": [
+        {"law": "FSSAI E-Commerce Guidelines", "right": "Must display nutritional info, veg/non-veg logo, allergen details, and minimum remaining shelf life"},
+        {"law": "CCPA Dark Patterns 2023", "right": "Drip pricing (hidden handling/surge/small-cart fees) is illegal"}
+      ],
+      "health_pharma_issue": [
+        {"law": "Drugs and Cosmetics Act 1940", "right": "Schedule H and X drugs cannot be sold without valid prescription"},
+        {"law": "CPA 2019, Sections 82-87", "right": "E-pharmacies are liable for dispensing wrong drugs or expired medicines"}
+      ],
+      "furniture_delivery_issue": [
+        {"law": "E-Commerce Rules 2020", "right": "Platform cannot disclaim return responsibility for broken/damaged/delayed goods"},
+        {"law": "Legal Metrology Rules 2011", "right": "Mandatory declaration of country of origin, manufacturer details, dimensions"}
+      ],
+      "counterfeit_product": [
+        {"law": "CPA 2019, Section 2(47)", "right": "Selling counterfeit goods is a serious Unfair Trade Practice"},
+        {"law": "E-Commerce Rules 2020, Rule 5", "right": "Sellers must state authentic country of origin and manufacturer address"}
+      ],
+      "seller_cancelled_order": [
+        {"law": "E-Commerce Rules 2020, Rule 5(3)(e)", "right": "Platform cannot charge cancellation fees unless it pays equal compensation when it cancels"},
+        {"law": "CPA 2019, Section 2(47)", "right": "Unilateral cancellation after accepting payment is an Unfair Trade Practice"}
+      ],
+      "train_issue": [
+        {"law": "Railway Passengers Rules 2015", "right": "TDR (Ticket Deposit Receipt) must be filed within prescribed time for refund"},
+        {"law": "CPA 2019", "right": "AC failure, delayed trains (>3 hours), or diverted routes are actionable deficiency of service"}
+      ]
+    }
+  }
+}

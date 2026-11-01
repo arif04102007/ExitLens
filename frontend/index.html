@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ExitLens | Automated Consumer Policy & Claim Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Tesseract.js for optical invoice analysis -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="banner" class="system-banner hidden"></div>
+
+<header class="app-header">
+  <div class="header-inner">
+    <a class="brand" href="/" id="brand">
+      <div class="brand-glyph">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <polyline points="11 8 11 11 14 11"></polyline>
+        </svg>
+      </div>
+      <div class="brand-meta">
+        <span class="brand-title">ExitLens</span>
+        <span class="brand-badge">Autonomous Claim Intelligence</span>
+      </div>
+    </a>
+
+    <div class="header-controls">
+      <button class="header-action-btn" id="btnStats" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+        <span>Platform Metrics</span>
+      </button>
+
+      <button class="header-action-btn" id="btnBenchmark" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>ExitLens vs ChatGPT</span>
+      </button>
+
+      <button class="header-action-btn" id="btnCalc" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="16" y1="14" x2="16" y2="14.01"></line>
+          <line x1="12" y1="14" x2="12" y2="14.01"></line>
+          <line x1="8" y1="14" x2="8" y2="14.01"></line>
+          <line x1="16" y1="18" x2="16" y2="18.01"></line>
+          <line x1="12" y1="18" x2="12" y2="18.01"></line>
+          <line x1="8" y1="18" x2="8" y2="18.01"></line>
+        </svg>
+        <span>Statutory Calculator</span>
+      </button>
+
+      <div class="divider-vertical"></div>
+
+      <button class="theme-switch" id="themeToggle" type="button" aria-label="Toggle theme">
+        <svg id="themeIconSun" class="theme-svg hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="themeIconMoon" class="theme-svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="page-container">
+  <!-- VIEW: INTAKE & HOME -->
+  <section id="home" class="view-panel">
+    <div class="hero-block">
+      <div class="system-pill">
+        <span class="status-indicator-dot"></span>
+        <span>TinyFish Autonomous Web Crawlers & Deterministic Legal Engine</span>
+      </div>
+      <h1 class="hero-title">Automated consumer claim intelligence & legal dispatch.</h1>
+      <p class="hero-description">Unlike generic chatbots that hallucinate outdated terms from memory, ExitLens dispatches live TinyFish browser agents to crawl live merchant portals, extract character-verified policies, compute statutory interest penalties, and automate formal dispute filings.</p>
+    </div>
+
+    <!-- SECTOR FILTER TABS -->
+    <div class="filter-toolbar">
+      <span class="toolbar-label">Sector Framework:</span>
+      <div class="sector-tabs" id="categoryGrid">
+        <button type="button" class="sector-tab active" data-cat="all">All Sectors</button>
+        <button type="button" class="sector-tab" data-cat="food_delivery_issue">Food & Quick Commerce</button>
+        <button type="button" class="sector-tab" data-cat="defective_product">Electronics & Hardware</button>
+        <button type="button" class="sector-tab" data-cat="flight_issue">Aviation & Travel</button>
+        <button type="button" class="sector-tab" data-cat="ride_hailing_issue">Transport & Cab</button>
+        <button type="button" class="sector-tab" data-cat="payment_dispute">Fintech & UPI</button>
+        <button type="button" class="sector-tab" data-cat="ticket_booking_issue">Ticketing & Events</button>
+        <button type="button" class="sector-tab" data-cat="subscription_cancel">Subscriptions & SaaS</button>
+        <button type="button" class="sector-tab" data-cat="telecom_issue">Telecom & ISP</button>
+        <button type="button" class="sector-tab" data-cat="insurance_claim">Insurance Policy</button>
+        <button type="button" class="sector-tab" data-cat="banking_dispute">Banking & Credit</button>
+        <button type="button" class="sector-tab" data-cat="edtech_refund">EdTech & Coaching</button>
+        <button type="button" class="sector-tab" data-cat="hotel_booking_issue">Hospitality</button>
+      </div>
+    </div>
+
+    <!-- CASE INTAKE CARD -->
+    <div class="intake-terminal card">
+      <form id="form">
+        <div class="terminal-bar">
+          <div class="terminal-label">Dispute Dossier Intake</div>
+          <div class="terminal-actions">
+            <input type="file" id="fileOcr" accept="image/*" class="sr">
+            <button type="button" class="action-link-btn" id="btnOcr">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              <span>Scan Invoice / Screenshot</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="ocrStatus" class="scan-progress-strip hidden">
+          <div class="progress-spinner"></div>
+          <span id="ocrStatusText" class="progress-text">Executing optical receipt parsing...</span>
+        </div>
+
+        <div class="input-field-wrapper">
+          <textarea id="text" rows="3" placeholder="State the grievance specifics (e.g., 'Ordered a defective monitor from Croma 12 days ago. Return was declined citing physical inspection policy.')" required></textarea>
+        </div>
+
+        <!-- CONTEXT PRESETS -->
+        <div class="presets-row">
+          <span class="presets-label">Representative Scenarios:</span>
+          <div class="chips-flow" id="chips">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- STRUCTURED METADATA -->
+        <details class="metadata-drawer">
+          <summary class="drawer-trigger">
+            <span class="drawer-chevron">▸</span>
+            <span>Structured Case Variables (Optional - Refines Statutory Jurisdictions)</span>
+          </summary>
+          <div class="metadata-grid">
+            <div class="form-group">
+              <label for="f_product">Product / Service Specification</label>
+              <input id="f_product" type="text" placeholder="e.g. boAt Rockerz 450, PNR #6E-204">
+            </div>
+            <div class="form-group">
+              <label for="f_seller">Commercial Entity / Counterparty</label>
+              <input id="f_seller" type="text" placeholder="e.g. Amazon, IndiGo, Swiggy">
+            </div>
+            <div class="form-group">
+              <label for="f_date">Transaction / Incident Date</label>
+              <input id="f_date" type="date">
+            </div>
+            <div class="form-group">
+              <label for="f_amount">Disputed Value (INR)</label>
+              <input id="f_amount" type="number" placeholder="e.g. 2499">
+            </div>
+          </div>
+        </details>
+
+        <div class="form-submission-bar">
+          <button class="btn btn-primary" id="go" type="submit">
+            <span>Execute Case Investigation</span>
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <div class="disclaimer-text">
+            <span>Deterministic legal guidance only. Non-representative legal advisory.</span>
+          </div>
+        </div>
+
+        <div id="err" class="alert-box alert-error hidden"></div>
+      </form>
+    </div>
+
+    <!-- RECENT CASES LEDGER -->
+    <div id="recentWrap" class="recent-ledger-section hidden">
+      <div class="section-title-row">
+        <h3 class="section-title">Case Registry Ledger</h3>
+        <span class="section-caption">Recent Local Investigations</span>
+      </div>
+      <div id="recent" class="ledger-list"></div>
+    </div>
+
+    <!-- DIFFERENTIATOR MATRIX -->
+    <div class="benchmark-card card">
+      <div class="section-title-row">
+        <h3 class="section-title">Architectural Advantage: ExitLens vs Generic Chatbots</h3>
+        <span class="section-caption">Why parametric models (ChatGPT / Claude) fail at consumer disputes</span>
+      </div>
+      <div class="benchmark-grid">
+        <div class="benchmark-item">
+          <div class="benchmark-badge diff-bad">ChatGPT / Claude</div>
+          <h4>Parametric Memory Hallucination</h4>
+          <p>Answers from outdated training data. Invents imaginary return windows and cannot provide live URLs or contractual proof.</p>
+        </div>
+        <div class="benchmark-item">
+          <div class="benchmark-badge diff-good">ExitLens Engine</div>
+          <h4>Live DOM Character-Verified Proof</h4>
+          <p>Dispatches TinyFish agents to crawl live websites. Every quoted rule is character-matched against fresh raw HTML with SHA-256 hashes.</p>
+        </div>
+        <div class="benchmark-item">
+          <div class="benchmark-badge diff-bad">ChatGPT / Claude</div>
+          <h4>Passive Text Only</h4>
+          <p>Can only produce paragraphs of advice. Cannot navigate forms, monitor policy changes, or execute actions.</p>
+        </div>
+        <div class="benchmark-item">
+          <div class="benchmark-badge diff-good">ExitLens Engine</div>
+          <h4>Active Action & Ingestion Sentinel</h4>
+          <p>Automates formal statutory legal notices, builds ready-to-file National Consumer Helpline (1915) dockets, and auto-fills merchant forms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: REAL-TIME PIPELINE -->
+  <section id="live" class="view-panel hidden">
+    <div class="terminal-view-header">
+      <div class="system-pill">
+        <span class="status-indicator-dot"></span>
+        <span>Active Real-Time Telemetry</span>
+      </div>
+      <h2 id="liveTitle" class="view-heading">Policy Extraction in Progress</h2>
+      <p class="view-subheading" id="liveCase"></p>
+    </div>
+
+    <div class="pipeline-stepper">
+      <div class="step-node" data-s="understand">
+        <span class="step-num">01</span>
+        <span class="step-name">Dispute Classification</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-node" data-s="agents">
+        <span class="step-num">02</span>
+        <span class="step-name">TinyFish Live Crawl</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-node" data-s="verify">
+        <span class="step-num">03</span>
+        <span class="step-name">Quote Verification</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-node" data-s="plan">
+        <span class="step-num">04</span>
+        <span class="step-name">Statutory Formulation</span>
+      </div>
+    </div>
+
+    <div id="cards" class="agent-cards-grid"></div>
+
+    <form id="followup" class="card clarification-card hidden">
+      <div class="clarification-header">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="fu_q" class="clarification-title"></span>
+      </div>
+      <div class="clarification-input-row">
+        <input id="fu_in" placeholder="Provide requested detail to resume investigation" required>
+        <button class="btn btn-primary" type="submit">Submit Context</button>
+      </div>
+    </form>
+
+    <div id="liveErr" class="alert-box alert-error hidden"></div>
+  </section>
+
+  <!-- VIEW: RESOLUTION DOSSIER -->
+  <section id="result" class="view-panel hidden">
+    <div class="dossier-header-bar">
+      <div>
+        <div class="system-pill">
+          <span class="status-indicator-dot dot-verified"></span>
+          <span>Verified Resolution Determination</span>
+        </div>
+        <h2 id="resTitle" class="dossier-title">Case Determination</h2>
+        <div class="dossier-meta-string" id="resSub"></div>
+      </div>
+      <div class="dossier-actions">
+        <button class="btn btn-secondary" id="again">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>New Investigation</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- WARRANTY & REFUND LIFECYCLE TRACKER -->
+    <div id="trackerWidget" class="tracker-dashboard card">
+      <div class="tracker-header">
+        <div>
+          <div class="statutory-badge">Active Lifecycle Sentinel</div>
+          <h3 style="font-size:16px;font-weight:700;margin-top:2px;">Warranty & Statutory Restitution Tracker</h3>
+        </div>
+        <div id="trackerBadge" class="lifecycle-badge">Evaluating...</div>
+      </div>
+
+      <div class="tracker-metrics-grid">
+        <div class="tracker-box">
+          <div class="tracker-val" id="tkDaysElapsed">--</div>
+          <div class="tracker-lbl">Days Elapsed</div>
+        </div>
+        <div class="tracker-box">
+          <div class="tracker-val" id="tkReturnDays">--</div>
+          <div class="tracker-lbl">Return Window</div>
+        </div>
+        <div class="tracker-box">
+          <div class="tracker-val" id="tkWarrantyDays">--</div>
+          <div class="tracker-lbl">Warranty Horizon</div>
+        </div>
+        <div class="tracker-box highlight">
+          <div class="tracker-val" id="tkPenaltyAmt">INR 0</div>
+          <div class="tracker-lbl" id="tkPenaltyLbl">Statutory Penalty</div>
+        </div>
+      </div>
+
+      <div class="tracker-progress-track">
+        <div class="progress-bar-fill" id="tkProgressFill" style="width: 25%"></div>
+      </div>
+    </div>
+
+    <!-- STATUTORY LEGAL RIGHTS MATRIX -->
+    <div id="legalPanel" class="legal-statutory-dossier card">
+      <div class="legal-dossier-header">
+        <div class="legal-title-block">
+          <div class="statutory-badge">Jurisprudence Reference</div>
+          <h3>Applicable Statutory Rights & Regulatory Penalties</h3>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnCopyLegal">Copy Legal Framework</button>
+      </div>
+      <div id="legalList" class="legal-citations-grid"></div>
+    </div>
+
+    <!-- DEADLINE & CONTRACTUAL TIERS -->
+    <div id="deadlines" class="deadlines-ledger"></div>
+
+    <div class="verification-legend">
+      <span class="legend-badge badge-ok">Verified by Direct DOM Match</span>
+      <span class="legend-badge badge-warn">Unconfirmed in Primary Source</span>
+      <span class="legend-badge badge-law">Statutory Provision</span>
+      <span class="legend-note">Exact quotes retain verified contractual wording. Plain cards denote deterministic legal deductions.</span>
+    </div>
+
+    <!-- VERIFIED ACTION CHECKLIST -->
+    <div class="checklist-container">
+      <ol id="steps" class="action-steps-stream"></ol>
+    </div>
+
+    <!-- EXECUTABLE REMEDY ACTIONS -->
+    <div class="remedy-actions-section">
+      <h3 class="section-title">Automated Complaint & Escalation Suite</h3>
+      <div class="remedy-btn-grid">
+        <button class="btn btn-primary action-trigger-btn" id="btnAutoComplaint">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span>Automated Dispute Dispatcher (Wizard)</span>
+        </button>
+        <button class="btn btn-secondary action-trigger-btn" id="aDraft">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <span>Formal Notice Email</span>
+        </button>
+        <button class="btn btn-secondary action-trigger-btn" id="btnNchDocket">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>National Consumer Helpline (1915) Docket</span>
+        </button>
+        <button class="btn btn-secondary action-trigger-btn" id="aWatch">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>TinyFish Policy Drift Monitor</span>
+        </button>
+        <button class="btn btn-secondary action-trigger-btn" id="aFill">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>TinyFish Browser Assistant</span>
+        </button>
+        <button class="btn btn-secondary action-trigger-btn" id="aCompare">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 12h8"></path><path d="M12 8v8"></path></svg>
+          <span>Hallucination Benchmark</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="panel" class="auxiliary-panel"></div>
+
+    <!-- CITATION REPOSITORY -->
+    <div class="provenance-section">
+      <h3 class="section-title">Verified Source Provenance</h3>
+      <div id="sources" class="provenance-records"></div>
+    </div>
+
+    <footer class="dossier-footer">
+      <p id="disc" class="disclaimer-footnote"></p>
+    </footer>
+  </section>
+</main>
+
+<!-- INSTITUTIONAL MODAL FRAMEWORK -->
+<div id="modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+  <div class="modal-card-container" id="modalCard"></div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

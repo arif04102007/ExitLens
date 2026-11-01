@@ -1,0 +1,17 @@
+{
+  "sellers": ["Amazon", "Flipkart", "Myntra", "Meesho", "Ajio", "Croma", "Reliance Digital", "Tata CLiQ", "Snapdeal", "Vijay Sales", "JioMart", "Nykaa", "Purplle", "Pepperfry", "Urban Ladder", "IKEA", "Wakefit", "WoodenStreet", "Nilkamal", "BigBasket", "DMart", "Spencer's", "Star Bazaar"],
+  "brands": ["boAt", "Sony", "JBL", "Samsung", "Apple", "OnePlus", "Realme", "Xiaomi", "Redmi", "Noise", "Bose", "Sennheiser", "LG", "HP", "Dell", "Lenovo", "Asus", "Philips", "Mi", "Oppo", "Vivo", "Google", "Dyson", "Canon", "Nikon", "Whirlpool", "Havells", "Bajaj", "Crompton", "Godrej", "Voltas", "Blue Star", "Daikin", "Haier", "IFB", "Bosch", "Panasonic", "Motorola", "Nothing", "iQOO", "POCO", "Puma", "Nike", "Adidas", "Levi's", "Allen Solly", "Raymond", "Titan", "Fastrack", "Fire-Boltt", "Boat Airdopes", "Marshall", "Audio-Technica", "Anker", "Garmin"],
+  "services": ["Netflix", "Spotify", "Amazon Prime", "Prime Video", "Disney+ Hotstar", "Hotstar", "YouTube Premium", "Zee5", "SonyLIV", "JioCinema", "Audible", "Canva", "Adobe", "Notion", "LinkedIn Premium", "Microsoft 365", "Cult.fit", "Duolingo", "Gaana", "Wynk Music", "Kuku FM", "Pocket FM"],
+  "food_delivery": ["Swiggy", "Zomato", "Zepto", "Blinkit", "BigBasket", "Dunzo", "Swiggy Instamart", "EatClub", "Box8", "Faasos", "Behrouz Biryani", "Domino's", "Pizza Hut", "McDonald's", "KFC", "Burger King"],
+  "travel": ["MakeMyTrip", "Goibibo", "EaseMyTrip", "Cleartrip", "Yatra", "IRCTC", "IndiGo", "Air India", "SpiceJet", "Vistara", "Akasa Air", "Air India Express", "Go First", "Alliance Air", "RailYatri", "ConfirmTkt", "RedBus", "AbhiBus"],
+  "ride_hailing": ["Uber", "Ola", "Rapido", "Namma Yatri", "BluSmart", "InDrive"],
+  "entertainment": ["BookMyShow", "Paytm Insider", "District", "TicketNew"],
+  "payments": ["PhonePe", "Google Pay", "Paytm", "CRED", "Amazon Pay", "BharatPe", "Freecharge", "MobiKwik", "Slice", "LazyPay", "Simpl", "Uni Cards"],
+  "telecom": ["Jio", "Airtel", "Vi", "Vodafone Idea", "BSNL", "ACT Fibernet", "Tata Play Fiber", "Hathway", "Excitel", "You Broadband"],
+  "insurance": ["Star Health", "HDFC ERGO", "ICICI Lombard", "Care Health", "Niva Bupa", "Bajaj Allianz", "LIC", "Max Life", "SBI Life", "TATA AIA", "PolicyBazaar", "Ditto Insurance", "Acko", "Digit Insurance"],
+  "banking": ["SBI", "HDFC Bank", "ICICI Bank", "Axis Bank", "Kotak Mahindra Bank", "Bank of Baroda", "PNB", "Canara Bank", "Union Bank", "IndusInd Bank", "Yes Bank", "IDFC First Bank", "Bajaj Finserv", "Home Credit"],
+  "health": ["PharmEasy", "Tata 1mg", "Netmeds", "Apollo 24/7", "Practo", "MediBuddy", "Lybrate", "DocPrime"],
+  "hotels": ["OYO", "MakeMyTrip", "Booking.com", "Agoda", "Treebo", "FabHotels", "Goibibo", "Yatra", "Airbnb"],
+  "edtech": ["Byju's", "Unacademy", "upGrad", "PhysicsWallah", "Scaler", "Simplilearn", "Allen", "FIITJEE", "Vedantu", "Toppr", "WhiteHat Jr", "Coding Ninjas"],
+  "furniture": ["Pepperfry", "Urban Ladder", "IKEA", "Wakefit", "WoodenStreet", "Nilkamal", "Godrej Interio", "HomeTown", "Durian"]
+}
