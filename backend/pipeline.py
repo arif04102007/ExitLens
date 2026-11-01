@@ -626,6 +626,7 @@ def extract_relevant_email(case: dict, target_party: str, cite: dict = None) -> 
 def claim_draft(case: dict, details: dict) -> dict:
     res = case.get("result") or {}
     facts = [f for f in res.get("facts", []) if f.get("verified")]
+    f_fields = case.get("fields") or {}
     seller = (
         case.get("seller")
         or case.get("platform")
@@ -636,16 +637,29 @@ def claim_draft(case: dict, details: dict) -> dict:
         or case.get("railway")
         or case.get("telco")
         or case.get("merchant")
+        or f_fields.get("seller")
+        or f_fields.get("platform")
+        or f_fields.get("service")
+        or f_fields.get("airline")
+        or f_fields.get("bank")
+        or f_fields.get("insurer")
     )
-    brand = case.get("brand")
+    brand = case.get("brand") or f_fields.get("brand")
+    if not seller and not brand:
+        parsed = heuristics.parse_intake(case.get("user_text", ""), f_fields)
+        seller = parsed.get("seller") or parsed.get("platform") or parsed.get("service")
+        brand = parsed.get("brand")
+
     target_party = seller or brand or "Support Team"
     name = details.get("name") or "[YOUR NAME]"
     order = details.get("order_id") or "[ORDER ID]"
-    product = case.get("product") or "the product"
-    when = case.get("purchase_date") or "[PURCHASE DATE]"
+    product = case.get("product") or f_fields.get("product") or "the product"
+    when = case.get("purchase_date") or f_fields.get("purchase_date") or "[PURCHASE DATE]"
     cite = next((f for f in facts if f["party"] in ("seller", "service", "platform", "airline", "insurer", "bank", "telco", "railway") and f["field"] in KEY_FIELDS), None) or \
         next((f for f in facts if f["field"] in KEY_FIELDS), None)
-    lines = [f"Dear {target_party} Support,", ""]
+
+    greeting = target_party if target_party.endswith("Support") else f"{target_party} Support"
+    lines = [f"Dear {greeting},", ""]
     ct = case.get("case_type")
     if ct == "subscription_cancel":
         lines.append(f"I would like to cancel my {product} subscription (account: {details.get('email') or '[ACCOUNT EMAIL]'}) and request a refund for any unused period where your policy allows it.")
