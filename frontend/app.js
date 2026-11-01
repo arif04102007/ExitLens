@@ -657,7 +657,8 @@ const KNOWN_GRIEVANCE_EMAILS = {
   "bsnl": "grievance@bsnl.co.in",
 
   // Electronics & Hardware Brands
-  "boat": "info@imaginemarketingindia.com",
+  "boat": "support@boat-lifestyle.com",
+  "boat lifestyle": "support@boat-lifestyle.com",
   "sony": "sonyindia.care@sony.com",
   "samsung": "support.india@samsung.com",
   "apple": "contactus.in@apple.com",
@@ -991,8 +992,11 @@ $("aDraft").addEventListener("click", () => {
     };
     const draft = await api(`/api/cases/${current}/claim-draft`, { body: payload });
 
-    const oppositeEntity = (activeCase && (activeCase.brand || activeCase.seller || (activeCase.fields && (activeCase.fields.brand || activeCase.fields.seller)))) || $("f_seller")?.value || "Merchant";
-    const targetGrievanceEmail = resolveGrievanceEmail(oppositeEntity);
+    const targetEntity = draft.target_party || (activeCase && (activeCase.seller || activeCase.platform || activeCase.service || activeCase.airline || activeCase.brand)) || "Merchant";
+    const targetEmail = draft.recipient_email || resolveGrievanceEmail(targetEntity);
+    const brandName = draft.brand;
+    const brandEmail = draft.brand_email || (brandName ? resolveGrievanceEmail(brandName) : null);
+    const showBrandButton = brandName && brandEmail && brandName.toLowerCase() !== targetEntity.toLowerCase();
 
     $("modalCard").innerHTML = `
       <h3>Statutory Pre-Litigation Demand</h3>
@@ -1003,16 +1007,20 @@ $("aDraft").addEventListener("click", () => {
           <label style="font-weight:600;font-size:12.5px;color:var(--text-primary);letter-spacing:0.02em;">
             Recipient Email (To:):
           </label>
-          <div style="display:flex;gap:6px;">
-            <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetGrievance" style="font-size:11px;padding:3px 8px;">
-              Merchant Desk (${esc(targetGrievanceEmail)})
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetPrimary" style="font-size:11px;padding:3px 8px;">
+              To: ${esc(targetEntity)} (${esc(targetEmail)})
             </button>
+            ${showBrandButton ? `
+            <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetBrand" style="font-size:11px;padding:3px 8px;">
+              To: ${esc(brandName)} Brand (${esc(brandEmail)})
+            </button>` : ''}
             <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetUser" style="font-size:11px;padding:3px 8px;">
-              My Inbox (${esc(userEmail)})
+              To: My Inbox (${esc(userEmail)})
             </button>
           </div>
         </div>
-        <input type="email" id="draftToEmail" value="${esc(targetGrievanceEmail)}" style="width:100%;padding:8px 12px;font-family:var(--font-mono);font-size:13px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-focus);border-radius:var(--radius-xs);" placeholder="Enter recipient email address">
+        <input type="email" id="draftToEmail" value="${esc(targetEmail)}" style="width:100%;padding:8px 12px;font-family:var(--font-mono);font-size:13px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-focus);border-radius:var(--radius-xs);" placeholder="Enter recipient email address">
       </div>
 
       <textarea style="width:100%;min-height:220px;font-family:var(--font-mono);font-size:12px;background:var(--bg-subtle);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px;" id="draftArea">${esc(draft.body)}</textarea>
@@ -1029,9 +1037,14 @@ $("aDraft").addEventListener("click", () => {
         <button class="btn btn-secondary btn-sm" data-close>Dismiss</button>
       </div>`;
 
-    $("btnDraftSetGrievance").onclick = () => {
-      $("draftToEmail").value = targetGrievanceEmail;
+    $("btnDraftSetPrimary").onclick = () => {
+      $("draftToEmail").value = targetEmail;
     };
+    if ($("btnDraftSetBrand")) {
+      $("btnDraftSetBrand").onclick = () => {
+        $("draftToEmail").value = brandEmail;
+      };
+    }
     $("btnDraftSetUser").onclick = () => {
       $("draftToEmail").value = userEmail;
     };
@@ -1040,20 +1053,20 @@ $("aDraft").addEventListener("click", () => {
       copyToClipboard($("draftArea").value, $("btnCopyDraft"), "Notice Copied!");
     };
     $("btnGmailDraft").onclick = () => {
-      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetEmail || userEmail;
       openMailComposer(draft.subject, $("draftArea").value, "gmail", $("draftFeedback"), recipient);
     };
     $("btnDownloadDraftEml").onclick = () => {
-      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetEmail || userEmail;
       downloadEmlFile(draft.subject, $("draftArea").value, recipient, userEmail);
       if ($("draftFeedback")) $("draftFeedback").innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Email (.eml) downloaded!</span> Double-click it to open in Apple Mail or Outlook.`;
     };
     $("btnMailtoDraft").onclick = () => {
-      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetEmail || userEmail;
       openMailComposer(draft.subject, $("draftArea").value, "default", $("draftFeedback"), recipient);
     };
     $("btnOutlookDraft").onclick = () => {
-      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetEmail || userEmail;
       openMailComposer(draft.subject, $("draftArea").value, "outlook", $("draftFeedback"), recipient);
     };
     $("modalCard").querySelector("[data-close]").onclick = close;
@@ -1255,8 +1268,8 @@ function setupComplaintWizard() {
 
         const result = await api(`/api/cases/${current}/automated-complaint`, { body: payload });
 
-        const oppositeEntity = result.entity || (activeCase && (activeCase.brand || activeCase.seller || (activeCase.fields && (activeCase.fields.brand || activeCase.fields.seller)))) || "Merchant / Service Provider";
-        const merchantEmail = resolveGrievanceEmail(oppositeEntity);
+        const oppositeEntity = result.entity || (activeCase && (activeCase.seller || activeCase.platform || activeCase.service || activeCase.airline || activeCase.brand)) || "Merchant / Service Provider";
+        const merchantEmail = result.recipient_email || resolveGrievanceEmail(oppositeEntity);
 
         $("modalCard").innerHTML = `
           <h3>Dispute Package Compiled</h3>
@@ -1272,10 +1285,10 @@ function setupComplaintWizard() {
                 </label>
                 <div style="display:flex;gap:6px;">
                   <button type="button" class="btn btn-secondary btn-xs" id="btnNoticeSetGrievance" style="font-size:11px;padding:3px 8px;">
-                    Merchant Desk (${esc(merchantEmail)})
+                    To: ${esc(oppositeEntity)} (${esc(merchantEmail)})
                   </button>
                   <button type="button" class="btn btn-secondary btn-xs" id="btnNoticeSetUser" style="font-size:11px;padding:3px 8px;">
-                    My Inbox (${esc(userEmail)})
+                    To: My Inbox (${esc(userEmail)})
                   </button>
                 </div>
               </div>

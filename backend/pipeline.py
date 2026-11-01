@@ -474,18 +474,178 @@ def _work_party(ctx, party):
     return {"party_id": party["id"], "facts": facts, "sources": sources, "state": state, "message": message}
 
 
+def extract_relevant_email(case: dict, target_party: str, cite: dict = None) -> str:
+    """Intelligently determine the relevant contact/grievance email for the target entity.
+    
+    Priority:
+    1. Direct email found in verified quotes or claim_route facts for this party.
+    2. Direct email found in any verified quote or policy source in this case.
+    3. Official canonical domain-based customer support & grievance email for this entity.
+    4. Domain-derived address (e.g. support@{domain}) using canonical host or citation URL.
+    """
+    if not target_party:
+        target_party = "Support"
+
+    clean_target = str(target_party).strip()
+    clean_lower = clean_target.lower()
+    res = (case or {}).get("result") or {}
+
+    # 1. Search verified facts/quotes for an explicit email
+    facts = [f for f in res.get("facts", []) if f.get("verified")]
+    party_facts = [f for f in facts if (f.get("party") or "").lower() == clean_lower]
+    for f in (party_facts + facts):
+        q = f.get("quote", "")
+        emails = re.findall(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b", q)
+        for em in emails:
+            em_lower = em.lower()
+            if not any(ign in em_lower for ign in ["example.com", "yourname", "user@", "email@"]):
+                return em
+
+    # 2. Check canonical mapping for known consumer grievance / support desks
+    known = {
+        # E-commerce & Retail
+        "amazon": "grievance-officer@amazon.in",
+        "flipkart": "grievance.officer@flipkart.com",
+        "myntra": "grievance@myntra.com",
+        "meesho": "legalsupport@meesho.com",
+        "ajio": "grievanceofficer@ajio.com",
+        "croma": "customersupport@croma.com",
+        "reliance digital": "reliancedigital@ril.com",
+        "tata cliq": "grievanceofficer@tatacliq.com",
+        "snapdeal": "grievanceofficer@snapdeal.com",
+        "nykaa": "grievanceofficer@nykaa.com",
+        "purplle": "grievance@purplle.com",
+        "jiomart": "cs@jiomart.com",
+        "ikea": "customercare.india@ikea.com",
+        "pepperfry": "grievance@pepperfry.com",
+        "urban ladder": "grievance@urbanladder.com",
+
+        # Food & Grocery Delivery
+        "swiggy": "grievances@swiggy.in",
+        "zomato": "grievance@zomato.com",
+        "zepto": "support@zeptonow.com",
+        "blinkit": "info@blinkit.com",
+        "bigbasket": "grievance@bigbasket.com",
+        "dunzo": "support@dunzo.in",
+        "dominos": "guestcaredominos@jublfood.com",
+
+        # Travel & Airlines & Railways
+        "makemytrip": "servicequeries@makemytrip.com",
+        "goibibo": "grievance@goibibo.com",
+        "easemytrip": "care@easemytrip.com",
+        "cleartrip": "customersupport@cleartrip.com",
+        "yatra": "support@yatra.com",
+        "irctc": "care@irctc.co.in",
+        "indigo": "customer.relations@goindigo.in",
+        "air india": "contactus@airindia.com",
+        "spicejet": "custrelations@spicejet.com",
+        "vistara": "custrelations@airvistara.com",
+        "akasa air": "nodalofficer@akasaair.com",
+
+        # Ride Hailing
+        "uber": "support@uber.com",
+        "ola": "support@olacabs.com",
+        "rapido": "support@rapido.bike",
+
+        # Digital Payments & Fintech
+        "phonepe": "grievance@phonepe.com",
+        "google pay": "support-in@google.com",
+        "paytm": "nodal@paytm.com",
+        "cred": "grievance@cred.club",
+        "bharatpe": "grievance@bharatpe.com",
+
+        # Telecom & Internet
+        "jio": "care@jio.com",
+        "airtel": "121@in.airtel.com",
+        "vi": "nodal.officer@vodafoneidea.com",
+        "vodafone": "nodal.officer@vodafoneidea.com",
+        "bsnl": "grievance@bsnl.co.in",
+
+        # Electronics & Hardware Brands
+        "boat": "support@boat-lifestyle.com",
+        "boat lifestyle": "support@boat-lifestyle.com",
+        "sony": "sonyindia.care@sony.com",
+        "samsung": "support.india@samsung.com",
+        "apple": "contactus.in@apple.com",
+        "oneplus": "onepluscare@oneplus.com",
+        "realme": "service.in@realme.com",
+        "xiaomi": "service.in@xiaomi.com",
+        "redmi": "service.in@xiaomi.com",
+        "mi": "service.in@xiaomi.com",
+        "noise": "help@gonoise.com",
+        "jbl": "india@harman.com",
+        "dell": "india_support@dell.com",
+        "hp": "in.contact@hp.com",
+        "lenovo": "consumercare@lenovo.com",
+        "asus": "rc_india@asus.com",
+
+        # Entertainment & Subscriptions
+        "bookmyshow": "helpdesk@bookmyshow.com",
+        "netflix": "termsinfo@netflix.com",
+        "hotstar": "grievance-officer@hotstar.com",
+        "disney+ hotstar": "grievance-officer@hotstar.com",
+        "spotify": "support@spotify.com",
+
+        # Banking
+        "hdfc bank": "grievance.redressal@hdfcbank.com",
+        "icici bank": "headservicequality@icicibank.com",
+        "sbi": "customercare@sbi.co.in",
+        "state bank of india": "customercare@sbi.co.in",
+        "axis bank": "nodalofficer@axisbank.com",
+        "kotak": "nodalofficer@kotak.com",
+        "kotak mahindra": "nodalofficer@kotak.com",
+
+        # Insurance
+        "star health": "grievance@starhealth.in",
+        "hdfc ergo": "grievance@hdfcergo.com",
+        "icici lombard": "customersupport@icicilombard.com",
+        "care health": "customerfirst@careinsurance.com",
+    }
+
+    for k, v in known.items():
+        if k in clean_lower or clean_lower in k:
+            return v
+
+    # 3. Derive from citation URL or sources domain if available
+    domain = None
+    if cite and cite.get("source_url"):
+        domain = host_of(cite["source_url"])
+    if not domain and res.get("sources"):
+        domain = host_of(res["sources"][0].get("url", ""))
+
+    if domain:
+        clean_dom = domain.lower().replace("www.", "")
+        return f"support@{clean_dom}"
+
+    # 4. Fallback to clean entity name domain
+    clean_domain = re.sub(r"[^a-z0-9]", "", clean_lower)
+    return f"support@{clean_domain or 'merchant'}.com"
+
+
 # ------------------------------------------------------------------ extras
 def claim_draft(case: dict, details: dict) -> dict:
     res = case.get("result") or {}
     facts = [f for f in res.get("facts", []) if f.get("verified")]
-    seller = case.get("seller") or case.get("service") or case.get("platform") or case.get("airline") or "Support Team"
+    seller = (
+        case.get("seller")
+        or case.get("platform")
+        or case.get("service")
+        or case.get("airline")
+        or case.get("bank")
+        or case.get("insurer")
+        or case.get("railway")
+        or case.get("telco")
+        or case.get("merchant")
+    )
+    brand = case.get("brand")
+    target_party = seller or brand or "Support Team"
     name = details.get("name") or "[YOUR NAME]"
     order = details.get("order_id") or "[ORDER ID]"
     product = case.get("product") or "the product"
     when = case.get("purchase_date") or "[PURCHASE DATE]"
     cite = next((f for f in facts if f["party"] in ("seller", "service", "platform", "airline", "insurer", "bank", "telco", "railway") and f["field"] in KEY_FIELDS), None) or \
         next((f for f in facts if f["field"] in KEY_FIELDS), None)
-    lines = [f"Dear {seller} Support,", ""]
+    lines = [f"Dear {target_party} Support,", ""]
     ct = case.get("case_type")
     if ct == "subscription_cancel":
         lines.append(f"I would like to cancel my {product} subscription (account: {details.get('email') or '[ACCOUNT EMAIL]'}) and request a refund for any unused period where your policy allows it.")
@@ -531,7 +691,19 @@ def claim_draft(case: dict, details: dict) -> dict:
     lines += ["", "Please confirm the next steps and a reference number for this request.", "", "Regards,", name]
     if details.get("phone"):
         lines.append(details["phone"])
-    return {"subject": subj, "body": "\n".join(lines)}
+
+    recipient_email = extract_relevant_email(case, target_party, cite)
+    brand_email = extract_relevant_email(case, brand, cite) if (brand and brand.lower() != target_party.lower()) else None
+
+    return {
+        "subject": subj,
+        "body": "\n".join(lines),
+        "target_party": target_party,
+        "recipient_email": recipient_email,
+        "seller": seller,
+        "brand": brand,
+        "brand_email": brand_email,
+    }
 
 
 def claim_fill_start(case_id: str, details: dict):
@@ -755,10 +927,13 @@ def automated_complaint(case_id: str, answers: dict) -> dict:
         "statutory_sections": "Consumer Protection Act 2019 (Section 2(11), 2(47)), E-Commerce Rules 2020",
     }
 
+    recipient_email = extract_relevant_email(case, entity, verified_quotes[0] if verified_quotes else None)
+
     return {
         "ok": True,
         "case_id": case_id,
         "entity": entity,
+        "recipient_email": recipient_email,
         "subject": f"Statutory Dispute Notice: {entity} - {case.get('product') or ct.replace('_', ' ').title()}",
         "legal_notice": "\n".join(notice_lines),
         "nch_docket": nch_docket,

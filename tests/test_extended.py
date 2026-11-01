@@ -236,3 +236,54 @@ def test_discover_canonical_host_fallback():
     host = discovery.discover_canonical_host(None, "IndiGo")
     assert host == "goindigo.in"
 
+
+def test_relevant_email_resolution_and_claim_draft():
+    # 1. Test case where user bought boAt product from Amazon
+    c_amazon_boat = {
+        "id": "test_amz_boat",
+        "case_type": "defective_product",
+        "seller": "Amazon",
+        "brand": "boAt",
+        "product": "boAt Rockerz",
+        "purchase_date": "2026-10-20",
+        "user_text": "boAt headphones defective. Purchased from Amazon.",
+        "result": {
+            "facts": [
+                {
+                    "verified": True,
+                    "party": "seller",
+                    "field": "return_window",
+                    "quote": "Most items can be returned within 30 days.",
+                    "source_url": "https://www.amazon.com/gp/help/customer/display.html"
+                }
+            ]
+        }
+    }
+    draft = pipeline.claim_draft(c_amazon_boat, {"name": "Mohammad Arif", "order_id": "OD4444"})
+    assert draft["target_party"] == "Amazon"
+    assert "Dear Amazon Support" in draft["body"]
+    assert draft["recipient_email"] == "grievance-officer@amazon.in"
+    assert draft["brand"] == "boAt"
+    assert draft["brand_email"] == "support@boat-lifestyle.com"
+
+    # 2. Test extraction of explicit email from verified policy quote
+    c_custom_email = {
+        "id": "test_custom_quote",
+        "case_type": "defective_product",
+        "seller": "CustomMerchant",
+        "result": {
+            "facts": [
+                {
+                    "verified": True,
+                    "party": "custommerchant",
+                    "field": "claim_route",
+                    "quote": "To file a warranty claim, email claims-desk@custommerchant.in directly.",
+                    "source_url": "https://custommerchant.in/terms"
+                }
+            ]
+        }
+    }
+    extracted = pipeline.extract_relevant_email(c_custom_email, "CustomMerchant")
+    assert extracted == "claims-desk@custommerchant.in"
+
+
