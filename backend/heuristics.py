@@ -107,13 +107,34 @@ def parse_case_text(text: str, extra_known=None) -> dict:
     edtech = _find_known(t, _cat("edtech"))
     furniture = _find_known(t, _cat("furniture"))
 
+    STOP_WORDS = {
+        "a", "an", "the", "my", "some", "two", "three", "few", "days", "weeks", "months",
+        "online", "store", "website", "shop", "app", "home", "work", "yesterday", "today",
+        "and", "not", "they", "is", "was", "got", "refund", "delivered", "torn", "broken",
+        "dead", "late", "cancelled", "swollen", "damaged", "ride", "cab", "flight", "ticket"
+    }
+
+    def _clean_cand(s):
+        if not s:
+            return None
+        parts = s.strip().split()
+        out_parts = []
+        for p in parts:
+            if p.lower() in STOP_WORDS:
+                break
+            out_parts.append(p)
+        res = " ".join(out_parts).strip()
+        return res if res and res.lower() not in STOP_WORDS else None
+
     if not seller:
         m = re.search(
-            r"(?:bought|purchased|ordered|got|buy|booked|order|ride|cab|flight)\s+(?:it\s+|this\s+|them\s+)?(?:online\s+)?(?:from|on|at|via|through|with)\s+"
+            r"(?:bought|purchased|ordered|got|buy|booked|order|ride|cab|flight|ticket|food|shoes|room|item)\s+(?:.+?\s+)?(?:from|on|at|via|through|with)\s+"
             r"([A-Za-z0-9.&'-]+(?:\s+[A-Za-z0-9.&'-]+)?)", t, flags=re.I)
+        if not m:
+            m = re.search(r"\b(?:from|on|via|through|at)\s+([A-Za-z0-9.&'-]+(?:\s+[A-Za-z0-9.&'-]+)?)\b", t, flags=re.I)
         if m:
-            cand = m.group(1).strip()
-            if cand.lower() not in {"a", "an", "the", "my", "some", "two", "three", "few", "days", "weeks", "months", "online", "store", "website", "shop", "app"}:
+            cand = _clean_cand(m.group(1))
+            if cand:
                 seller = cand
 
     product = None
@@ -149,25 +170,25 @@ def parse_case_text(text: str, extra_known=None) -> dict:
     hotel = None
 
     if case_type == "food_delivery_issue":
-        platform = food_delivery
+        platform = food_delivery or seller
     elif case_type == "ride_hailing_issue":
-        platform = ride_hailing
+        platform = ride_hailing or seller
     elif case_type == "payment_dispute":
-        platform = payments or banking
+        platform = payments or banking or seller
         if banking:
             bank = banking
     elif case_type == "ticket_booking_issue":
-        platform = entertainment
+        platform = entertainment or seller
     elif case_type == "telecom_issue":
-        telco = telecom
+        telco = telecom or seller
     elif case_type == "insurance_claim":
-        insurer = insurance
+        insurer = insurance or seller
     elif case_type == "banking_dispute":
-        bank = banking
+        bank = banking or seller
     elif case_type == "edtech_refund":
-        platform = edtech
+        platform = edtech or seller
     elif case_type == "health_pharma_issue":
-        platform = health
+        platform = health or seller
     elif case_type == "grocery_delivery_issue":
         platform = food_delivery or seller
     elif case_type == "flight_issue":
@@ -176,14 +197,14 @@ def parse_case_text(text: str, extra_known=None) -> dict:
         elif travel in _OTAS:
             ota = travel
         else:
-            airline = travel
+            airline = travel or seller
     elif case_type == "train_issue":
-        railway = travel if travel in _RAILWAYS else (travel or "IRCTC")
+        railway = travel if travel in _RAILWAYS else (travel or seller or "IRCTC")
     elif case_type == "hotel_booking_issue":
         if hotels in _HOTEL_OTAS:
             platform = hotels
         else:
-            hotel = hotels
+            hotel = hotels or seller
     elif case_type == "furniture_delivery_issue":
         if furniture and not seller:
             seller = furniture
