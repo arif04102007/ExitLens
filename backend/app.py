@@ -23,7 +23,14 @@ async def body(request):
 
 
 async def index(request):
-    return FileResponse(FRONT / "index.html")
+    return FileResponse(
+        FRONT / "index.html",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0",
+        },
+    )
 
 
 async def health(request):

@@ -131,13 +131,13 @@ function show(name) {
    ========================================================================== */
 function setupTheme() {
   const currentSaved = localStorage.getItem("exitlens_theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  const isDark = currentSaved ? currentSaved === "dark" : prefersDark;
+  // Default to dark institutional theme with vivid emerald green text unless explicitly set to light
+  const isDark = currentSaved ? currentSaved === "dark" : true;
 
   applyTheme(isDark ? "dark" : "light");
 
   $("themeToggle").addEventListener("click", () => {
-    const cur = document.documentElement.getAttribute("data-theme") || (prefersDark ? "dark" : "light");
+    const cur = document.documentElement.getAttribute("data-theme") || "dark";
     const next = cur === "dark" ? "light" : "dark";
     applyTheme(next);
     localStorage.setItem("exitlens_theme", next);
@@ -598,11 +598,110 @@ function copyToClipboard(text, btnElement = null, successMsg = "Copied!") {
   }
 }
 
+const KNOWN_GRIEVANCE_EMAILS = {
+  // E-commerce & Retail
+  "amazon": "grievance-officer@amazon.in",
+  "flipkart": "grievance.officer@flipkart.com",
+  "myntra": "grievance@myntra.com",
+  "meesho": "legalsupport@meesho.com",
+  "ajio": "grievanceofficer@ajio.com",
+  "croma": "customersupport@croma.com",
+  "reliance digital": "reliancedigital@ril.com",
+  "tata cliq": "grievanceofficer@tatacliq.com",
+  "snapdeal": "grievanceofficer@snapdeal.com",
+  "nykaa": "grievanceofficer@nykaa.com",
+  "purplle": "grievance@purplle.com",
+  "jiomart": "cs@jiomart.com",
+  "ikea": "customercare.india@ikea.com",
+  "pepperfry": "grievance@pepperfry.com",
+  "urban ladder": "grievance@urbanladder.com",
+
+  // Food & Grocery Delivery
+  "swiggy": "grievances@swiggy.in",
+  "zomato": "grievance@zomato.com",
+  "zepto": "support@zeptonow.com",
+  "blinkit": "info@blinkit.com",
+  "bigbasket": "grievance@bigbasket.com",
+  "dunzo": "support@dunzo.in",
+  "dominos": "guestcaredominos@jublfood.com",
+
+  // Travel & Airlines & Railways
+  "makemytrip": "servicequeries@makemytrip.com",
+  "goibibo": "grievance@goibibo.com",
+  "easemytrip": "care@easemytrip.com",
+  "cleartrip": "customersupport@cleartrip.com",
+  "yatra": "support@yatra.com",
+  "irctc": "care@irctc.co.in",
+  "indigo": "customer.relations@goindigo.in",
+  "air india": "contactus@airindia.com",
+  "spicejet": "custrelations@spicejet.com",
+  "vistara": "custrelations@airvistara.com",
+  "akasa air": "nodalofficer@akasaair.com",
+
+  // Ride Hailing
+  "uber": "support@uber.com",
+  "ola": "support@olacabs.com",
+  "rapido": "support@rapido.bike",
+
+  // Digital Payments & Fintech
+  "phonepe": "grievance@phonepe.com",
+  "google pay": "support-in@google.com",
+  "paytm": "nodal@paytm.com",
+  "cred": "grievance@cred.club",
+  "bharatpe": "grievance@bharatpe.com",
+
+  // Telecom & Internet
+  "jio": "appellate.reliance@ril.com",
+  "airtel": "nodalofficer@airtel.com",
+  "vi": "nodal.officer@vodafoneidea.com",
+  "bsnl": "grievance@bsnl.co.in",
+
+  // Electronics & Hardware Brands
+  "boat": "info@imaginemarketingindia.com",
+  "sony": "sonyindia.care@sony.com",
+  "samsung": "support.india@samsung.com",
+  "apple": "contactus.in@apple.com",
+  "oneplus": "onepluscare@oneplus.com",
+  "realme": "service.in@realme.com",
+  "xiaomi": "service.in@xiaomi.com",
+  "noise": "help@gonoise.com",
+  "jbl": "india@harman.com",
+  "dell": "india_support@dell.com",
+  "hp": "in.contact@hp.com",
+  "lenovo": "consumercare@lenovo.com",
+  "asus": "rc_india@asus.com",
+
+  // Entertainment
+  "bookmyshow": "helpdesk@bookmyshow.com",
+  "netflix": "termsinfo@netflix.com",
+  "hotstar": "grievance-officer@hotstar.com",
+  "spotify": "support@spotify.com",
+
+  // Banking
+  "hdfc bank": "grievance.redressal@hdfcbank.com",
+  "icici bank": "headservicequality@icicibank.com",
+  "sbi": "customercare@sbi.co.in",
+  "axis bank": "nodalofficer@axisbank.com",
+  "kotak": "nodalofficer@kotak.com"
+};
+
+function resolveGrievanceEmail(entityName) {
+  if (!entityName) return "grievance-officer@oppositeparty.com";
+  const clean = entityName.toLowerCase().trim();
+  for (const [key, email] of Object.entries(KNOWN_GRIEVANCE_EMAILS)) {
+    if (clean.includes(key) || key.includes(clean)) {
+      return email;
+    }
+  }
+  const domainSafe = clean.replace(/[^a-z0-9]/g, "");
+  return `grievance-officer@${domainSafe || "oppositeparty"}.com`;
+}
+
 function openMailComposer(subject, body, provider = "gmail", feedbackEl = null, toEmail = "") {
   copyToClipboard(body);
-  const targetEmail = (toEmail || "").trim();
+  const targetEmail = (toEmail || "").trim() || "grievance-officer@oppositeparty.com";
   if (feedbackEl) {
-    feedbackEl.innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Notice copied to clipboard!</span> Opening ${provider === "gmail" ? "Gmail" : provider === "outlook" ? "Outlook Web" : "default mail app"}${targetEmail ? " (Recipient: " + esc(targetEmail) + ")" : ""}...`;
+    feedbackEl.innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Notice copied to clipboard!</span> Opening ${provider === "gmail" ? "Gmail" : provider === "outlook" ? "Outlook Web" : "default mail app"} (Recipient: ${esc(targetEmail)})...`;
   }
 
   const sTo = encodeURIComponent(targetEmail);
@@ -614,15 +713,14 @@ function openMailComposer(subject, body, provider = "gmail", feedbackEl = null, 
   const sBody = encodeURIComponent(safeSnippet);
 
   if (provider === "gmail") {
-    const toParam = sTo ? `&to=${sTo}` : "";
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1${toParam}&su=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
+    // Explicit &to= parameter ensures Gmail To: field is always populated
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=${sTo}&su=${sSub}&body=${sBody}`;
+    window.open(gmailUrl, "_blank", "noopener,noreferrer");
   } else if (provider === "outlook") {
-    const toParam = sTo ? `to=${sTo}&` : "";
-    window.open(`https://outlook.live.com/mail/0/deeplink/compose?${toParam}subject=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
+    window.open(`https://outlook.live.com/mail/0/deeplink/compose?to=${sTo}&subject=${sSub}&body=${sBody}`, "_blank", "noopener,noreferrer");
   } else {
-    // Default system mailto client
-    const toStr = targetEmail ? `${targetEmail}?` : "?";
-    const mailtoUri = `mailto:${toStr}subject=${sSub}&body=${sBody}`;
+    // Standard RFC 2368 mailto URI with target email address in path
+    const mailtoUri = `mailto:${targetEmail}?subject=${sSub}&body=${sBody}`;
     const link = document.createElement("a");
     link.href = mailtoUri;
     document.body.appendChild(link);
@@ -634,7 +732,7 @@ function openMailComposer(subject, body, provider = "gmail", feedbackEl = null, 
 }
 
 function downloadEmlFile(subject, body, toEmail = "", fromEmail = "consumer@example.com") {
-  const safeTo = toEmail || "grievance-officer@oppositeparty.com";
+  const safeTo = (toEmail || "").trim() || "grievance-officer@oppositeparty.com";
   const dateStr = new Date().toUTCString();
   const emlContent = 
 `From: ${fromEmail}
@@ -839,14 +937,17 @@ function setupModalInteractions() {
 }
 
 // FORMAL LEGAL NOTICE DRAFTING
-const generateNoticeModal = (heading, sub, actionLabel) => `
+const generateNoticeModal = (heading, sub, actionLabel) => {
+  const defaultUserEmail = localStorage.getItem("exitlens_user_email") || "arifprivate444@gmail.com";
+  const defaultUserName = localStorage.getItem("exitlens_user_name") || "Mohammad Arif";
+  return `
   <h3>${heading}</h3>
   <p class="modal-caption">${sub}</p>
   <form id="noticeForm">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
       <div class="form-group">
         <label>Complainant Legal Name</label>
-        <input id="n_name" placeholder="Full Legal Name" required>
+        <input id="n_name" placeholder="Full Legal Name" value="${esc(defaultUserName)}" required>
       </div>
       <div class="form-group">
         <label>Reference / Transaction Identifier</label>
@@ -854,7 +955,7 @@ const generateNoticeModal = (heading, sub, actionLabel) => `
       </div>
       <div class="form-group">
         <label>Primary Contact Email</label>
-        <input id="n_email" type="email" placeholder="contact@example.com" required>
+        <input id="n_email" type="email" placeholder="contact@example.com" value="${esc(defaultUserEmail)}" required>
       </div>
       <div class="form-group">
         <label>Primary Phone</label>
@@ -866,6 +967,7 @@ const generateNoticeModal = (heading, sub, actionLabel) => `
       <button class="btn btn-primary" type="submit">${actionLabel}</button>
     </div>
   </form>`;
+};
 
 $("aDraft").addEventListener("click", () => {
   const close = openModal(generateNoticeModal(
@@ -876,17 +978,44 @@ $("aDraft").addEventListener("click", () => {
 
   $("noticeForm").onsubmit = async (e) => {
     e.preventDefault();
+    const userName = $("n_name").value.trim();
+    const userEmail = $("n_email").value.trim() || localStorage.getItem("exitlens_user_email") || "arifprivate444@gmail.com";
+    localStorage.setItem("exitlens_user_email", userEmail);
+    if (userName) localStorage.setItem("exitlens_user_name", userName);
+
     const payload = {
-      name: $("n_name").value,
+      name: userName,
       order_id: $("n_order").value,
-      email: $("n_email").value,
+      email: userEmail,
       phone: $("n_phone").value,
     };
     const draft = await api(`/api/cases/${current}/claim-draft`, { body: payload });
+
+    const oppositeEntity = (activeCase && (activeCase.brand || activeCase.seller || (activeCase.fields && (activeCase.fields.brand || activeCase.fields.seller)))) || $("f_seller")?.value || "Merchant";
+    const targetGrievanceEmail = resolveGrievanceEmail(oppositeEntity);
+
     $("modalCard").innerHTML = `
       <h3>Statutory Pre-Litigation Demand</h3>
       <p class="modal-caption"><strong>Subject:</strong> ${esc(draft.subject)}</p>
-      <textarea style="width:100%;min-height:240px;font-family:var(--font-mono);font-size:12px;background:var(--bg-subtle);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px;" id="draftArea">${esc(draft.body)}</textarea>
+
+      <div style="margin:12px 0 10px 0;background:var(--bg-subtle);border:1px solid var(--border-default);padding:10px 14px;border-radius:var(--radius-sm);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+          <label style="font-weight:600;font-size:12.5px;color:var(--text-primary);letter-spacing:0.02em;">
+            Recipient Email (To:):
+          </label>
+          <div style="display:flex;gap:6px;">
+            <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetGrievance" style="font-size:11px;padding:3px 8px;">
+              Merchant Desk (${esc(targetGrievanceEmail)})
+            </button>
+            <button type="button" class="btn btn-secondary btn-xs" id="btnDraftSetUser" style="font-size:11px;padding:3px 8px;">
+              My Inbox (${esc(userEmail)})
+            </button>
+          </div>
+        </div>
+        <input type="email" id="draftToEmail" value="${esc(targetGrievanceEmail)}" style="width:100%;padding:8px 12px;font-family:var(--font-mono);font-size:13px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-focus);border-radius:var(--radius-xs);" placeholder="Enter recipient email address">
+      </div>
+
+      <textarea style="width:100%;min-height:220px;font-family:var(--font-mono);font-size:12px;background:var(--bg-subtle);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:12px;" id="draftArea">${esc(draft.body)}</textarea>
       <div id="draftFeedback" style="font-size:12px;margin:6px 0;min-height:18px;"></div>
       <div style="display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:10px;">
         <button class="btn btn-secondary btn-sm" id="btnCopyDraft">Copy Notice</button>
@@ -894,22 +1023,38 @@ $("aDraft").addEventListener("click", () => {
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           <span>Open in Gmail</span>
         </button>
+        <button class="btn btn-secondary btn-sm" id="btnDownloadDraftEml">Download .eml</button>
         <button class="btn btn-secondary btn-sm" id="btnMailtoDraft">Open in Mail App</button>
         <button class="btn btn-secondary btn-sm" id="btnOutlookDraft">Open in Outlook</button>
         <button class="btn btn-secondary btn-sm" data-close>Dismiss</button>
       </div>`;
 
+    $("btnDraftSetGrievance").onclick = () => {
+      $("draftToEmail").value = targetGrievanceEmail;
+    };
+    $("btnDraftSetUser").onclick = () => {
+      $("draftToEmail").value = userEmail;
+    };
+
     $("btnCopyDraft").onclick = () => {
       copyToClipboard($("draftArea").value, $("btnCopyDraft"), "Notice Copied!");
     };
     $("btnGmailDraft").onclick = () => {
-      openMailComposer(draft.subject, $("draftArea").value, "gmail", $("draftFeedback"));
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      openMailComposer(draft.subject, $("draftArea").value, "gmail", $("draftFeedback"), recipient);
+    };
+    $("btnDownloadDraftEml").onclick = () => {
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      downloadEmlFile(draft.subject, $("draftArea").value, recipient, userEmail);
+      if ($("draftFeedback")) $("draftFeedback").innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Email (.eml) downloaded!</span> Double-click it to open in Apple Mail or Outlook.`;
     };
     $("btnMailtoDraft").onclick = () => {
-      openMailComposer(draft.subject, $("draftArea").value, "default", $("draftFeedback"));
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      openMailComposer(draft.subject, $("draftArea").value, "default", $("draftFeedback"), recipient);
     };
     $("btnOutlookDraft").onclick = () => {
-      openMailComposer(draft.subject, $("draftArea").value, "outlook", $("draftFeedback"));
+      const recipient = ($("draftToEmail") ? $("draftToEmail").value.trim() : "") || targetGrievanceEmail || userEmail;
+      openMailComposer(draft.subject, $("draftArea").value, "outlook", $("draftFeedback"), recipient);
     };
     $("modalCard").querySelector("[data-close]").onclick = close;
   };
@@ -1071,11 +1216,11 @@ function setupComplaintWizard() {
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
             <div class="form-group">
               <label>Complainant Full Legal Name *</label>
-              <input id="cq_name" placeholder="Full Legal Name" required>
+              <input id="cq_name" placeholder="Full Legal Name" value="${esc(localStorage.getItem('exitlens_user_name') || 'Mohammad Arif')}" required>
             </div>
             <div class="form-group">
               <label>Contact Email *</label>
-              <input id="cq_email" type="email" placeholder="you@example.com" required>
+              <input id="cq_email" type="email" placeholder="you@example.com" value="${esc(localStorage.getItem('exitlens_user_email') || 'arifprivate444@gmail.com')}" required>
             </div>
           </div>
           ${formFields}
@@ -1096,18 +1241,22 @@ function setupComplaintWizard() {
           if (el) details[q.id] = el.value;
         });
 
+        const userName = $("cq_name").value.trim();
+        const userEmail = $("cq_email").value.trim() || localStorage.getItem("exitlens_user_email") || "arifprivate444@gmail.com";
+        localStorage.setItem("exitlens_user_email", userEmail);
+        if (userName) localStorage.setItem("exitlens_user_name", userName);
+
         const payload = {
-          name: $("cq_name").value,
-          email: $("cq_email").value,
+          name: userName,
+          email: userEmail,
           phone: $("f_seller")?.value || "",
           details: details
         };
 
         const result = await api(`/api/cases/${current}/automated-complaint`, { body: payload });
 
-        const userEmail = $("cq_email").value.trim();
-        const oppositeEntity = result.entity || "Merchant / Service Provider";
-        const merchantEmail = "grievance-officer@" + oppositeEntity.toLowerCase().replace(/[^a-z0-9]/g, "") + ".com";
+        const oppositeEntity = result.entity || (activeCase && (activeCase.brand || activeCase.seller || (activeCase.fields && (activeCase.fields.brand || activeCase.fields.seller)))) || "Merchant / Service Provider";
+        const merchantEmail = resolveGrievanceEmail(oppositeEntity);
 
         $("modalCard").innerHTML = `
           <h3>Dispute Package Compiled</h3>
@@ -1115,6 +1264,24 @@ function setupComplaintWizard() {
 
           <div style="margin-bottom:16px;">
             <div class="statutory-badge">Notice 1: Formal Merchant Legal Demand</div>
+
+            <div style="margin:10px 0 10px 0;background:var(--bg-subtle);border:1px solid var(--border-default);padding:10px 14px;border-radius:var(--radius-sm);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+                <label style="font-weight:600;font-size:12.5px;color:var(--text-primary);letter-spacing:0.02em;">
+                  Recipient Email (To:):
+                </label>
+                <div style="display:flex;gap:6px;">
+                  <button type="button" class="btn btn-secondary btn-xs" id="btnNoticeSetGrievance" style="font-size:11px;padding:3px 8px;">
+                    Merchant Desk (${esc(merchantEmail)})
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-xs" id="btnNoticeSetUser" style="font-size:11px;padding:3px 8px;">
+                    My Inbox (${esc(userEmail)})
+                  </button>
+                </div>
+              </div>
+              <input type="email" id="dispNoticeTo" value="${esc(merchantEmail)}" style="width:100%;padding:8px 12px;font-family:var(--font-mono);font-size:13px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-focus);border-radius:var(--radius-xs);" placeholder="Enter recipient email address">
+            </div>
+
             <textarea style="width:100%;min-height:160px;font-family:var(--font-mono);font-size:11.5px;background:var(--bg-subtle);color:var(--text-primary);border:1px solid var(--border-default);border-radius:var(--radius-sm);padding:10px;margin-top:6px;" id="dispNotice">${esc(result.legal_notice)}</textarea>
             <div id="noticeFeedback" style="font-size:12.5px;margin:6px 0;min-height:18px;"></div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;">
@@ -1127,6 +1294,7 @@ function setupComplaintWizard() {
                 <span>Download Email (.eml)</span>
               </button>
               <button class="btn btn-secondary btn-sm" id="btnNoticeGmail">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                 <span>Open in Gmail</span>
               </button>
               <button class="btn btn-secondary btn-sm" id="btnCopyNotice">Copy Legal Notice</button>
@@ -1170,24 +1338,35 @@ function setupComplaintWizard() {
           </div>
         `;
 
+        $("btnNoticeSetGrievance").onclick = () => {
+          $("dispNoticeTo").value = merchantEmail;
+        };
+        $("btnNoticeSetUser").onclick = () => {
+          $("dispNoticeTo").value = userEmail;
+        };
+
         $("btnEmailMyself").onclick = () => {
           openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"), userEmail);
         };
         $("btnDownloadEml").onclick = () => {
-          downloadEmlFile(result.subject, $("dispNotice").value, merchantEmail, userEmail);
+          const targetTo = ($("dispNoticeTo") ? $("dispNoticeTo").value.trim() : "") || merchantEmail;
+          downloadEmlFile(result.subject, $("dispNotice").value, targetTo, userEmail);
           if ($("noticeFeedback")) $("noticeFeedback").innerHTML = `<span style="color:var(--status-verified);font-weight:600;">✓ Email (.eml) downloaded!</span> Double-click it in your Downloads folder to open in Apple Mail or Outlook.`;
         };
         $("btnCopyNotice").onclick = () => {
           copyToClipboard($("dispNotice").value, $("btnCopyNotice"), "Notice Copied!");
         };
         $("btnNoticeGmail").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"), merchantEmail);
+          const targetTo = ($("dispNoticeTo") ? $("dispNoticeTo").value.trim() : "") || merchantEmail || userEmail;
+          openMailComposer(result.subject, $("dispNotice").value, "gmail", $("noticeFeedback"), targetTo);
         };
         $("btnNoticeMailto").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "default", $("noticeFeedback"), merchantEmail);
+          const targetTo = ($("dispNoticeTo") ? $("dispNoticeTo").value.trim() : "") || merchantEmail || userEmail;
+          openMailComposer(result.subject, $("dispNotice").value, "default", $("noticeFeedback"), targetTo);
         };
         $("btnNoticeOutlook").onclick = () => {
-          openMailComposer(result.subject, $("dispNotice").value, "outlook", $("noticeFeedback"), merchantEmail);
+          const targetTo = ($("dispNoticeTo") ? $("dispNoticeTo").value.trim() : "") || merchantEmail || userEmail;
+          openMailComposer(result.subject, $("dispNotice").value, "outlook", $("noticeFeedback"), targetTo);
         };
 
         $("btnCopyNch").onclick = () => {
